@@ -1,0 +1,26 @@
+name: Aviso de sugerencias pendientes
+
+on:
+  schedule:
+    - cron: "0 9 * * 1" # todos los lunes 09:00 UTC
+  workflow_dispatch: {} # también puedes lanzarlo a mano desde Actions
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Contar sugerencias pendientes en Supabase
+        run: |
+          COUNT=$(curl -s \
+            "$SUPABASE_URL/rest/v1/model_suggestions?status=eq.pending&select=id" \
+            -H "apikey: $SUPABASE_SERVICE_ROLE_KEY" \
+            -H "Authorization: Bearer $SUPABASE_SERVICE_ROLE_KEY" \
+            -H "Prefer: count=exact" \
+            -o /dev/null -w '%{header_json}' | jq -r '.["content-range"][0]' | cut -d/ -f2)
+          echo "Sugerencias pendientes: $COUNT"
+          if [ "$COUNT" -gt 0 ]; then
+            echo "::warning::Hay $COUNT sugerencias de modelos esperando revisión en Supabase."
+          fi
+        env:
+          SUPABASE_URL: ${{ secrets.NEXT_PUBLIC_SUPABASE_URL }}
+          SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
