@@ -108,6 +108,8 @@ export async function getDevices(): Promise<Device[]> {
       id,
       model_name,
       model_code,
+      image_url,
+      image_url_2,
       is_solar,
       no_battery,
       verified,
@@ -125,6 +127,8 @@ export async function getDevices(): Promise<Device[]> {
     id: row.id,
     model_name: row.model_name,
     model_code: row.model_code,
+    image_url: row.image_url,
+    image_url_2: row.image_url_2,
     is_solar: row.is_solar,
     no_battery: row.no_battery,
     verified: row.verified,
@@ -141,6 +145,8 @@ export type UpdateDeviceInput = {
   brandId: number;
   modelName: string;
   modelCode?: string;
+  imageUrl?: string | null;
+  imageUrl2?: string | null;
   batteryTypeId: number | null;
   isSolar: boolean;
   noBattery: boolean;
@@ -157,6 +163,8 @@ export async function updateDevice(input: UpdateDeviceInput) {
       brand_id: input.brandId,
       model_name: input.modelName,
       model_code: input.modelCode || null,
+      image_url: input.imageUrl || null,
+      image_url_2: input.imageUrl2 || null,
       battery_type_id: input.noBattery ? null : input.batteryTypeId,
       is_solar: input.isSolar,
       no_battery: input.noBattery,
@@ -307,6 +315,8 @@ export type ApproveInput = {
   brandId: number;
   modelName: string;
   modelCode?: string;
+  imageUrl?: string | null;
+  imageUrl2?: string | null;
   batteryTypeId: number | null;
   isSolar: boolean;
   noBattery: boolean;
@@ -321,6 +331,8 @@ export async function approveSuggestion(input: ApproveInput) {
     brand_id: input.brandId,
     model_name: input.modelName,
     model_code: input.modelCode || null,
+    image_url: input.imageUrl || null,
+    image_url_2: input.imageUrl2 || null,
     battery_type_id: input.noBattery ? null : input.batteryTypeId,
     is_solar: input.isSolar,
     no_battery: input.noBattery,

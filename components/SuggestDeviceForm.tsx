@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { suggestDevice, type Category } from "@/app/actions";
 import { getCategoryIcon } from "@/lib/icons";
+import { PhotoUploadField } from "./PhotoUploadField";
 
 export function SuggestDeviceForm({
   prefillModel,
@@ -15,6 +16,8 @@ export function SuggestDeviceForm({
 }) {
   const [open, setOpen] = useState(false);
   const [categorySlug, setCategorySlug] = useState(defaultCategorySlug ?? "");
+  const [imageUrl, setImageUrl] = useState<string | null>(null);
+  const [imageUrl2, setImageUrl2] = useState<string | null>(null);
   const [status, setStatus] = useState<"idle" | "sending" | "sent" | "error">(
     "idle"
   );
@@ -32,6 +35,8 @@ export function SuggestDeviceForm({
       modelCode: String(formData.get("modelCode") ?? ""),
       batteryCodeReported: String(formData.get("batteryCode") ?? ""),
       email: String(formData.get("email") ?? ""),
+      imageUrl: imageUrl ?? undefined,
+      imageUrl2: imageUrl2 ?? undefined,
     });
 
     setStatus(result.ok ? "sent" : "error");
@@ -115,6 +120,12 @@ export function SuggestDeviceForm({
         placeholder="Email (opcional, para avisarte)"
         className="w-full rounded-sm border border-line bg-case px-3 py-2 text-sm text-cream outline-none focus:border-brass"
       />
+
+      <div className="space-y-2">
+        <PhotoUploadField label="Foto 1 (opcional)" onUploaded={setImageUrl} />
+        <PhotoUploadField label="Foto 2 (opcional)" onUploaded={setImageUrl2} />
+      </div>
+
       <button
         type="submit"
         disabled={status === "sending"}

@@ -5,7 +5,6 @@ import { DeviceList } from "@/components/admin/DeviceList";
 import { LogoutButton } from "@/components/admin/LogoutButton";
 import { AdminNav } from "@/components/admin/AdminNav";
 
-
 export default async function AdminDevicesPage() {
   try {
     await requireAdmin();

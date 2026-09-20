@@ -8,11 +8,14 @@ import {
   createBatteryType,
 } from "@/app/admin/actions";
 import { getCategoryIcon } from "@/lib/icons";
+import { PhotoUploadField } from "@/components/PhotoUploadField";
 
 export type Device = {
   id: number;
   model_name: string;
   model_code: string | null;
+  image_url: string | null;
+  image_url_2: string | null;
   is_solar: boolean;
   no_battery: boolean;
   verified: boolean;
@@ -73,6 +76,8 @@ export function DeviceRow({
 
   const [isSolar, setIsSolar] = useState(device.is_solar);
   const [noBattery, setNoBattery] = useState(device.no_battery);
+  const [imageUrl, setImageUrl] = useState<string | null>(device.image_url);
+  const [imageUrl2, setImageUrl2] = useState<string | null>(device.image_url_2);
 
   function resetToDeviceValues() {
     setCategoryId(device.category ? String(device.category.id) : "");
@@ -82,6 +87,8 @@ export function DeviceRow({
     setBatteryTypeId(device.battery ? String(device.battery.id) : "");
     setIsSolar(device.is_solar);
     setNoBattery(device.no_battery);
+    setImageUrl(device.image_url);
+    setImageUrl2(device.image_url_2);
     setError(null);
   }
 
@@ -146,6 +153,8 @@ export function DeviceRow({
           batteryTypeId: noBattery ? null : Number(batteryTypeId),
           isSolar,
           noBattery,
+          imageUrl,
+          imageUrl2,
         });
 
         const category = categories.find((c) => c.id === Number(categoryId));
@@ -163,6 +172,8 @@ export function DeviceRow({
           battery: noBattery ? null : battery ? { id: battery.id, code: battery.code } : device.battery,
           is_solar: isSolar,
           no_battery: noBattery,
+          image_url: imageUrl,
+          image_url_2: imageUrl2,
         });
 
         setEditing(false);
@@ -188,8 +199,27 @@ export function DeviceRow({
   if (!editing) {
     return (
       <li className="flex items-start gap-4 rounded-sm border border-line bg-dial p-4">
-        <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-sm bg-case text-steel">
-          <Icon size={18} strokeWidth={1.75} />
+        <div className="flex shrink-0 gap-1.5">
+          {device.image_url ? (
+            // eslint-disable-next-line @next/next/no-img-element
+            <img
+              src={device.image_url}
+              alt={device.model_name}
+              className="h-10 w-10 rounded-sm border border-line object-cover"
+            />
+          ) : (
+            <div className="flex h-10 w-10 items-center justify-center rounded-sm bg-case text-steel">
+              <Icon size={18} strokeWidth={1.75} />
+            </div>
+          )}
+          {device.image_url_2 && (
+            // eslint-disable-next-line @next/next/no-img-element
+            <img
+              src={device.image_url_2}
+              alt={`${device.model_name} (foto 2)`}
+              className="h-10 w-10 rounded-sm border border-line object-cover"
+            />
+          )}
         </div>
 
         <div className="min-w-0 flex-1">
@@ -405,6 +435,22 @@ export function DeviceRow({
           onChange={(e) => setModelCode(e.target.value)}
           placeholder="Código/módulo (opcional)"
           className="rounded-sm border border-line bg-case px-3 py-2 text-sm text-cream outline-none focus:border-brass"
+        />
+      </div>
+
+      <div className="mt-4 space-y-2">
+        <p className="mb-1.5 text-xs text-steel">Fotos</p>
+        <PhotoUploadField
+          label="Foto 1"
+          initialUrl={imageUrl}
+          folder="devices"
+          onUploaded={setImageUrl}
+        />
+        <PhotoUploadField
+          label="Foto 2 (opcional)"
+          initialUrl={imageUrl2}
+          folder="devices"
+          onUploaded={setImageUrl2}
         />
       </div>
 

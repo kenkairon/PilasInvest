@@ -10,13 +10,20 @@ export function ResultRow({ result }: { result: DeviceResult }) {
   return (
     <li className="flex items-start gap-4 border-b border-line py-5 first:pt-0 last:border-b-0">
       {result.image_url ? (
-        <Image
-          src={result.image_url}
-          alt={`${brand?.name ?? ""} ${model_name}`}
-          width={56}
-          height={56}
-          className="shrink-0 rounded-sm object-cover"
-        />
+        <div className="relative shrink-0">
+          <Image
+            src={result.image_url}
+            alt={`${brand?.name ?? ""} ${model_name}`}
+            width={56}
+            height={56}
+            className="rounded-sm object-cover"
+          />
+          {result.image_url_2 && (
+            <span className="absolute -bottom-1 -right-1 rounded-full bg-brass px-1.5 py-0.5 text-[10px] font-medium leading-none text-case">
+              +1
+            </span>
+          )}
+        </div>
       ) : (
         <div className="flex h-14 w-14 shrink-0 items-center justify-center rounded-sm bg-case text-steel">
           <Icon size={22} strokeWidth={1.75} />

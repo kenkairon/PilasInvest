@@ -63,6 +63,12 @@ export function SearchPanel({ categories }: { categories: Category[] }) {
         />
       </div>
 
+      {/*
+        Nota: los resultados con foto (result.image_url) la muestran; los que
+        no tienen foto muestran el ícono de categoría en su lugar (ver
+        ResultRow.tsx). La búsqueda de texto funciona igual para ambos casos,
+        tengan o no foto — no se filtra nada por eso.
+      */}
       <div className="mt-6 min-h-[4rem]">
         {isPending && <p className="text-sm text-steel">Buscando…</p>}
 

@@ -30,6 +30,7 @@ export type DeviceResult = {
   is_solar: boolean;
   no_battery: boolean;
   image_url: string | null;
+  image_url_2: string | null;
   brand: { name: string } | null;
   category: { name: string; slug: string; icon: string } | null;
   battery: {
@@ -62,6 +63,7 @@ export async function searchDevices(params: {
       is_solar,
       no_battery,
       image_url,
+      image_url_2,
       brand:brands ( name ),
       category:device_categories ( name, slug, icon ),
       battery:battery_types ( code, common_names, voltage, diameter_mm, height_mm )
@@ -94,6 +96,7 @@ export async function searchDevices(params: {
     is_solar: row.is_solar,
     no_battery: row.no_battery,
     image_url: row.image_url,
+    image_url_2: row.image_url_2,
     brand: Array.isArray(row.brand) ? row.brand[0] ?? null : row.brand,
     category: Array.isArray(row.category) ? row.category[0] ?? null : row.category,
     battery: Array.isArray(row.battery) ? row.battery[0] ?? null : row.battery,
@@ -107,6 +110,8 @@ export type SuggestionInput = {
   modelCode?: string;
   batteryCodeReported?: string;
   email?: string;
+  imageUrl?: string;
+  imageUrl2?: string;
 };
 
 export type SuggestionResult = { ok: true } | { ok: false; message: string };
@@ -127,6 +132,8 @@ export async function suggestDevice(
     model_code: input.modelCode?.trim() || null,
     battery_code_reported: input.batteryCodeReported?.trim() || null,
     email: input.email?.trim() || null,
+    image_url: input.imageUrl?.trim() || null,
+    image_url_2: input.imageUrl2?.trim() || null,
   });
 
   if (error) {

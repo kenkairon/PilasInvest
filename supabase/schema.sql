@@ -65,6 +65,7 @@ create table if not exists devices (
   is_solar boolean not null default false,
   no_battery boolean not null default false, -- automático, cableado, recargable fijo...
   image_url text,
+  image_url_2 text,
   verified boolean not null default false,
   created_at timestamptz default now(),
   updated_at timestamptz default now()
@@ -90,12 +91,17 @@ create table if not exists model_suggestions (
   model_name text not null,
   model_code text,
   battery_code_reported text,
+  image_url text,
+  image_url_2 text,
   email text,
   status text not null default 'pending' check (status in ('pending','approved','rejected')),
   reviewer_notes text,
   created_at timestamptz default now(),
   reviewed_at timestamptz
 );
+
+comment on column model_suggestions.image_url is
+  'Foto que el usuario adjuntó al sugerir el dispositivo (bucket device-photos). Si se aprueba, pasa a devices.image_url.';
 
 -- ---------------------------------------------------------
 -- updated_at automático en devices
@@ -142,6 +148,20 @@ create policy "public insert suggestions" on model_suggestions
 -- Nadie puede leer/editar/borrar sugerencias desde el cliente:
 -- eso se hace desde /admin con la service_role key (nunca expuesta al navegador),
 -- así que no se crean policies de select/update aquí.
+
+-- ---------------------------------------------------------
+-- Bucket público de Storage para fotos de dispositivos
+-- (adjuntadas por el usuario al sugerir un modelo)
+-- ---------------------------------------------------------
+insert into storage.buckets (id, name, public)
+values ('device-photos', 'device-photos', true)
+on conflict (id) do nothing;
+
+create policy "public read device photos" on storage.objects
+  for select using (bucket_id = 'device-photos');
+
+create policy "anyone can upload device photos" on storage.objects
+  for insert with check (bucket_id = 'device-photos');
 
 -- =========================================================
 -- Datos semilla

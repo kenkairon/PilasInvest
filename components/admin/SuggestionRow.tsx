@@ -17,6 +17,8 @@ export type Suggestion = {
   model_name: string;
   model_code: string | null;
   battery_code_reported: string | null;
+  image_url: string | null;
+  image_url_2: string | null;
   email: string | null;
   created_at: string;
 };
@@ -130,6 +132,8 @@ export function SuggestionRow({
           brandId: Number(brandId),
           modelName,
           modelCode,
+          imageUrl: suggestion.image_url,
+          imageUrl2: suggestion.image_url_2,
           batteryTypeId: noBattery ? null : Number(batteryTypeId),
           isSolar,
           noBattery,
@@ -154,20 +158,44 @@ export function SuggestionRow({
 
   return (
     <li className="rounded-sm border border-line bg-dial p-4">
-      <div className="flex items-baseline justify-between gap-4">
-        <p className="font-medium text-cream">
-          {suggestion.category_name ? `${suggestion.category_name} · ` : ""}
-          {suggestion.brand_name} — {suggestion.model_name}
-        </p>
-        <p className="shrink-0 font-mono text-xs text-steel">
-          {formatDate(suggestion.created_at)}
-        </p>
+      <div className="flex items-start gap-3">
+        {(suggestion.image_url || suggestion.image_url_2) && (
+          <div className="flex shrink-0 gap-1.5">
+            {suggestion.image_url && (
+              // eslint-disable-next-line @next/next/no-img-element
+              <img
+                src={suggestion.image_url}
+                alt={suggestion.model_name}
+                className="h-12 w-12 rounded-sm border border-line object-cover"
+              />
+            )}
+            {suggestion.image_url_2 && (
+              // eslint-disable-next-line @next/next/no-img-element
+              <img
+                src={suggestion.image_url_2}
+                alt={`${suggestion.model_name} (foto 2)`}
+                className="h-12 w-12 rounded-sm border border-line object-cover"
+              />
+            )}
+          </div>
+        )}
+        <div className="min-w-0 flex-1">
+          <div className="flex items-baseline justify-between gap-4">
+            <p className="font-medium text-cream">
+              {suggestion.category_name ? `${suggestion.category_name} · ` : ""}
+              {suggestion.brand_name} — {suggestion.model_name}
+            </p>
+            <p className="shrink-0 font-mono text-xs text-steel">
+              {formatDate(suggestion.created_at)}
+            </p>
+          </div>
+          <p className="mt-1 text-sm text-steel">
+            Código: {suggestion.model_code || "—"} · Pila reportada por el
+            usuario: {suggestion.battery_code_reported || "—"}
+            {suggestion.email ? ` · ${suggestion.email}` : ""}
+          </p>
+        </div>
       </div>
-      <p className="mt-1 text-sm text-steel">
-        Código: {suggestion.model_code || "—"} · Pila reportada por el
-        usuario: {suggestion.battery_code_reported || "—"}
-        {suggestion.email ? ` · ${suggestion.email}` : ""}
-      </p>
 
       {/* Categoría */}
       <div className="mt-4">
