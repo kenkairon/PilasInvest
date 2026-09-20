@@ -5,7 +5,6 @@ import { searchDevices, type DeviceResult, type Category } from "@/app/actions";
 import { CategoryTabs } from "./CategoryTabs";
 import { ResultRow } from "./ResultRow";
 import { SuggestDeviceForm } from "./SuggestDeviceForm";
-import { PhotoScanButton } from "./PhotoScanButton";
 
 export function SearchPanel({ categories }: { categories: Category[] }) {
   const [query, setQuery] = useState("");
@@ -13,7 +12,6 @@ export function SearchPanel({ categories }: { categories: Category[] }) {
   const [results, setResults] = useState<DeviceResult[]>([]);
   const [searched, setSearched] = useState(false);
   const [isPending, startTransition] = useTransition();
-  const [detectedCodes, setDetectedCodes] = useState<string[]>([]);
 
   function runSearch(nextQuery: string, nextCategory: string | null) {
     if (nextQuery.trim().length < 2) {
@@ -42,14 +40,6 @@ export function SearchPanel({ categories }: { categories: Category[] }) {
     runSearch(query, slug);
   }
 
-  function handleCodesDetected(codes: string[]) {
-    setDetectedCodes(codes);
-    // Prueba automáticamente con el candidato más probable (el primero,
-    // ya viene priorizado en PhotoScanButton). Si no es el correcto, el
-    // usuario puede tocar cualquiera de los otros chips de abajo.
-    handleQueryChange(codes[0]);
-  }
-
   return (
     <div>
       <CategoryTabs
@@ -62,48 +52,15 @@ export function SearchPanel({ categories }: { categories: Category[] }) {
         <label htmlFor="model-search" className="block text-sm text-steel">
           Marca y modelo, o número de módulo/código
         </label>
-        <div className="mt-2 flex gap-2">
-          <input
-            id="model-search"
-            type="text"
-            value={query}
-            onChange={(e) => handleQueryChange(e.target.value)}
-            placeholder='p. ej. "F-91W", "Tanita HD-660" o "3159"'
-            className="w-full rounded-sm border border-line bg-dial px-4 py-3 text-cream placeholder:text-steel/60 outline-none focus:border-brass focus-visible:ring-2 focus-visible:ring-brass/40"
-            autoComplete="off"
-          />
-          <PhotoScanButton onCodesDetected={handleCodesDetected} />
-        </div>
-
-        {detectedCodes.length > 1 && (
-          <div className="mt-3">
-            <p className="text-xs text-steel">
-              Detectamos varios códigos en la foto — toca el correcto si el
-              primero no era:
-            </p>
-            <div className="mt-1.5 flex flex-wrap gap-1.5">
-              {detectedCodes.map((code) => (
-                <button
-                  key={code}
-                  type="button"
-                  onClick={() => handleQueryChange(code)}
-                  className={`rounded-full border px-2.5 py-1 font-mono text-xs transition-colors ${
-                    query === code
-                      ? "border-brass bg-brass text-case"
-                      : "border-line text-steel hover:border-steel hover:text-cream"
-                  }`}
-                >
-                  {code}
-                </button>
-              ))}
-            </div>
-          </div>
-        )}
-
-        <p className="mt-2 text-xs text-steel">
-          La foto se procesa en tu propio navegador y nunca se guarda ni se
-          sube a ningún servidor — solo se usa para leer el texto grabado.
-        </p>
+        <input
+          id="model-search"
+          type="text"
+          value={query}
+          onChange={(e) => handleQueryChange(e.target.value)}
+          placeholder='p. ej. "F-91W", "Tanita HD-660" o "3159"'
+          className="mt-2 w-full rounded-sm border border-line bg-dial px-4 py-3 text-cream placeholder:text-steel/60 outline-none focus:border-brass focus-visible:ring-2 focus-visible:ring-brass/40"
+          autoComplete="off"
+        />
       </div>
 
       <div className="mt-6 min-h-[4rem]">
