@@ -34,7 +34,7 @@ export function SuggestDeviceForm({
       modelName: String(formData.get("modelName") ?? ""),
       modelCode: String(formData.get("modelCode") ?? ""),
       batteryCodeReported: String(formData.get("batteryCode") ?? ""),
-      email: String(formData.get("email") ?? ""),
+      whatsapp: String(formData.get("whatsapp") ?? ""),
       imageUrl: imageUrl ?? undefined,
       imageUrl2: imageUrl2 ?? undefined,
     });
@@ -115,9 +115,9 @@ export function SuggestDeviceForm({
         />
       </div>
       <input
-        name="email"
-        type="email"
-        placeholder="Email (opcional, para avisarte)"
+        name="whatsapp"
+        type="tel"
+        placeholder="WhatsApp (opcional, para avisarte) — ej. +56912345678"
         className="w-full rounded-sm border border-line bg-case px-3 py-2 text-sm text-cream outline-none focus:border-brass"
       />
 

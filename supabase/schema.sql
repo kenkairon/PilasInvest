@@ -93,7 +93,7 @@ create table if not exists model_suggestions (
   battery_code_reported text,
   image_url text,
   image_url_2 text,
-  email text,
+  whatsapp text,
   status text not null default 'pending' check (status in ('pending','approved','rejected')),
   reviewer_notes text,
   created_at timestamptz default now(),

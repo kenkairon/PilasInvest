@@ -19,7 +19,7 @@ export type Suggestion = {
   battery_code_reported: string | null;
   image_url: string | null;
   image_url_2: string | null;
-  email: string | null;
+  whatsapp: string | null;
   created_at: string;
 };
 
@@ -192,8 +192,17 @@ export function SuggestionRow({
           <p className="mt-1 text-sm text-steel">
             Código: {suggestion.model_code || "—"} · Pila reportada por el
             usuario: {suggestion.battery_code_reported || "—"}
-            {suggestion.email ? ` · ${suggestion.email}` : ""}
           </p>
+          {suggestion.whatsapp && (
+            <a
+              href={`https://wa.me/${suggestion.whatsapp.replace(/[^0-9]/g, "")}`}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="mt-1 inline-flex items-center gap-1 text-sm text-brass hover:underline"
+            >
+              📱 {suggestion.whatsapp} — contactar por WhatsApp
+            </a>
+          )}
         </div>
       </div>
 

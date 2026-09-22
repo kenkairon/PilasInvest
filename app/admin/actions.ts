@@ -309,6 +309,35 @@ export async function deleteBatteryType(id: number) {
   revalidatePath("/admin/catalog");
 }
 
+export async function getContacts() {
+  await requireAdmin();
+  const supabase = createAdminClient();
+
+  const { data, error } = await supabase
+    .from("model_suggestions")
+    .select(
+      "id, whatsapp, category_name, brand_name, model_name, model_code, status, created_at"
+    )
+    .not("whatsapp", "is", null)
+    .order("created_at", { ascending: false });
+
+  if (error) throw new Error(error.message);
+  return data ?? [];
+}
+
+export async function updateContactWhatsapp(id: number, whatsapp: string) {
+  await requireAdmin();
+  const supabase = createAdminClient();
+
+  const { error } = await supabase
+    .from("model_suggestions")
+    .update({ whatsapp: whatsapp.trim() || null })
+    .eq("id", id);
+
+  if (error) throw new Error(error.message);
+  revalidatePath("/admin/contacts");
+}
+
 export type ApproveInput = {
   suggestionId: number;
   categoryId: number;

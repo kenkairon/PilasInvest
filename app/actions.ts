@@ -109,7 +109,7 @@ export type SuggestionInput = {
   modelName: string;
   modelCode?: string;
   batteryCodeReported?: string;
-  email?: string;
+  whatsapp?: string;
   imageUrl?: string;
   imageUrl2?: string;
 };
@@ -131,7 +131,7 @@ export async function suggestDevice(
     model_name: input.modelName.trim(),
     model_code: input.modelCode?.trim() || null,
     battery_code_reported: input.batteryCodeReported?.trim() || null,
-    email: input.email?.trim() || null,
+    whatsapp: input.whatsapp?.trim() || null,
     image_url: input.imageUrl?.trim() || null,
     image_url_2: input.imageUrl2?.trim() || null,
   });

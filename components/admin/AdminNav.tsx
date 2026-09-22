@@ -4,6 +4,7 @@ const LINKS = [
   { href: "/admin", label: "Sugerencias" },
   { href: "/admin/devices", label: "Dispositivos" },
   { href: "/admin/catalog", label: "Marcas y pilas" },
+  { href: "/admin/contacts", label: "Contactos" },
 ] as const;
 
 export function AdminNav({ active }: { active: (typeof LINKS)[number]["href"] }) {

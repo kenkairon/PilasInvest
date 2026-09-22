@@ -1,4 +1,5 @@
 import { SearchPanel } from "@/components/SearchPanel";
+import { WhatsAppFloatingButton } from "@/components/WhatsAppFloatingButton";
 import { getCategories } from "@/app/actions";
 
 export default async function Home() {
@@ -21,6 +22,8 @@ export default async function Home() {
       <div className="mt-10">
         <SearchPanel categories={categories} />
       </div>
+
+      <WhatsAppFloatingButton />
     </main>
   );
 }
