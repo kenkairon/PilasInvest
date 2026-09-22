@@ -2,7 +2,7 @@
 
 // Tu número de WhatsApp, en formato internacional sin '+', espacios ni guiones.
 const WHATSAPP_NUMBER = "56979347247";
-const DEFAULT_MESSAGE = "Hola, tengo una consulta sobre Pila Finder";
+const DEFAULT_MESSAGE = "Hola, tengo una consulta";
 
 /**
  * Botón flotante fijo en la esquina inferior derecha que abre un chat de
